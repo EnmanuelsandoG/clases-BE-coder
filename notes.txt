@@ -1,0 +1,30 @@
+  addProduct() {
+    if (
+      !this.title ||
+      !this.description ||
+      !this.price ||
+      !this.thumbnail ||
+      !this.code ||
+      !this.stock
+    ) {
+      console.error("All fields must be filled!⚠️");
+      return; // Se agrega un return para salir de la función si faltan campos.
+    }
+  
+    const productExists = products.some((product) => product.code === this.code);
+    if (productExists) {
+      console.error("This product code already exists!🙁");
+      return; // Se agrega un return para salir de la función si el código de producto ya existe.
+    }
+  
+    let id = ProductManager.id++;
+    products.push({ id: id, ...this }); // Se agrega el nuevo producto basado en los datos actuales.
+  
+    return products;
+  }
+
+Aquí están los cambios realizados:
+Se agrega un return después del mensaje de error “All fields must be filled!” para salir de la función si faltan campos obligatorios. Esto evita que el código continúe ejecutándose y evita errores posteriores.
+En lugar de usar el método map, se utiliza el método some para verificar si existe algún producto con el mismo código. Esto se hace para evitar agregar un nuevo producto con un código duplicado. Si se encuentra un producto con el mismo código, se muestra un mensaje de error y se sale de la función.
+Se agrega un nuevo producto al arreglo products utilizando el operador spread (...this) para copiar las propiedades del objeto actual.
+Se retorna el arreglo products actualizado al final de la función.
