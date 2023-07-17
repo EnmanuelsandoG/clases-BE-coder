@@ -16,71 +16,84 @@ Al agregarlo, debe crearse con un id autoincrementable
 -Debe contar con un método “getProductById” el cual debe buscar en el arreglo el producto que coincida con el id
 En caso de no coincidir ningún id, mostrar en consola un error “Not found”*/
 
-const randomNum = function () {
-  return Math.floor(Math.random() * 100);
-};
-
-const randomId = () => {
-  let genericId = randomNum();
-  return genericId;
-};
-
 const products = [];
 
 class ProductManager {
-  constructor(title, description, price, thumbnail, stock) {
+  constructor(title, description, price, thumbnail, code, stock) {
     this.title = title;
     this.description = description;
     this.price = price;
     this.thumbnail = thumbnail;
-    this.code = randomId();
+    this.code = code;
     this.stock = stock;
   }
+
+  static id = 0;
 
   static getProducts() {
     return products;
   }
 
   addProduct() {
-    return products.push(this);
-
-    // for (let i = 0; i < products.length; i++) {
-    //   if (products[i].code.includes(this.code)) {
-    //     throw new Error("Product already exists!❌");
-    //   } else {
-    //     return products.push(this);
-    //   }
-    // }
+    if (
+      !this.title ||
+      !this.description ||
+      !this.price ||
+      !this.thumbnail ||
+      !this.code ||
+      !this.stock
+    ) {
+      console.error("All fields must be filled!⚠️");
+    } else {
+      products.map(({ code }) => {
+        if (code === this.code) {
+          console.error("this product code already exists!🙁");
+        }
+      });
+      let id = ProductManager.id++;
+      return products.push({ id: id, ...this });
+    }
   }
+
+  getProductById = (productID) =>
+    products.find((product) => product.id == productID) ?? {};
 }
 
 const productManager1 = new ProductManager(
-  "pelicula",
-  "blabla",
-  20000,
-  "no tiene",
-  5
+  "Baseball bat",
+  "Wooden Bat",
+  45000,
+  "not found",
+  6749783,
+  25
 );
 
 const productManager2 = new ProductManager(
-  "pelota",
-  "blabla",
-  25000,
+  "Baseball",
+  "Little baseball used for the sport",
+  3000,
   "not found",
-  2
+  4567872,
+  50
 );
 const productManager3 = new ProductManager(
-  "sombrilla",
-  "blabla",
-  10000,
-  "hello",
-  10
+  "Football",
+  "ball used for the sport",
+  12000,
+  "not found",
+  7345019,
+  13
 );
 
 productManager1.addProduct();
 productManager2.addProduct();
 productManager3.addProduct();
-console.log(products);
+console.log(ProductManager.getProducts());
+console.log(productManager1.getProductById(2));
+
+// products.map(({ code, title }) => {
+//   console.log(`this is the code: ${code} of ${title}`);
+// });
 
 // console.log(products);
 
@@ -102,3 +115,12 @@ console.log(products);
 // };
 
 // console.log(runningArray(array));
+
+// const randomNum = function () {
+//   return Math.floor(Math.random() * 100);
+// };
+
+// const randomId = () => {
+//   let genericId = randomNum();
+//   return genericId;
+// };
