@@ -45,20 +45,26 @@ class ProductManager {
       !this.stock
     ) {
       console.error("All fields must be filled!⚠️");
-    } else {
-      products.map((product) => {
-        if (product.code === this.code) {
-          console.error("this product code already exists!🙁");
-        }
-        let id = ProductManager.id++;
-        products.push({ id: id, ...product });
-      });
-      return products;
+      return; // Se agrega un return para salir de la función si faltan campos.
     }
+
+    const productExists = products.some(
+      (product) => product.code === this.code
+    );
+    if (productExists) {
+      console.error(`This product code ${this.code} already exists!🙁`);
+      return; // Se agrega un return para salir de la función si el código de producto ya existe.
+    }
+
+    let id = ProductManager.id++;
+    products.push({ id: id, ...this }); // Se agrega el nuevo producto basado en los datos actuales.
+
+    return products;
   }
 
-  getProductById = (productID) =>
-    products.find((product) => product.id == productID) ?? {};
+  getProductById(productID) {
+    return products.find((product) => product.id == productID) ?? {};
+  }
 }
 
 const productManager1 = new ProductManager(
@@ -102,37 +108,3 @@ productManager3.addProduct();
 productManager4.addProduct();
 console.log(ProductManager.getProducts());
 console.log(productManager1.getProductById(2));
-
-// products.map(({ code, title }) => {
-//   console.log(`this is the code: ${code} of ${title}`);
-// });
-
-// console.log(products);
-
-// let array = [
-//   {
-//     name: "james",
-//     id: 1,
-//   },
-//   {
-//     name: "albert",
-//     id: 2,
-//   },
-// ];
-
-// const runningArray = function (array) {
-//   for (let i = 0; i < array.length; i++) {
-//     console.log(array[i].id);
-//   }
-// };
-
-// console.log(runningArray(array));
-
-// const randomNum = function () {
-//   return Math.floor(Math.random() * 100);
-// };
-
-// const randomId = () => {
-//   let genericId = randomNum();
-//   return genericId;
-// };
