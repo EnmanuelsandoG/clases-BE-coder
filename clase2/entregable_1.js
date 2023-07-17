@@ -26,6 +26,7 @@ class ProductManager {
     this.thumbnail = thumbnail;
     this.code = code;
     this.stock = stock;
+    // this.products = products;
   }
 
   static id = 0;
@@ -45,13 +46,14 @@ class ProductManager {
     ) {
       console.error("All fields must be filled!⚠️");
     } else {
-      products.map(({ code }) => {
-        if (code === this.code) {
+      products.map((product) => {
+        if (product.code === this.code) {
           console.error("this product code already exists!🙁");
         }
+        let id = ProductManager.id++;
+        products.push({ id: id, ...product });
       });
-      let id = ProductManager.id++;
-      return products.push({ id: id, ...this });
+      return products;
     }
   }
 
@@ -85,9 +87,19 @@ const productManager3 = new ProductManager(
   13
 );
 
+const productManager4 = new ProductManager(
+  "Football Copy",
+  "ball used for the sport",
+  12000,
+  "not found",
+  7345019,
+  13
+);
+
 productManager1.addProduct();
 productManager2.addProduct();
 productManager3.addProduct();
+productManager4.addProduct();
 console.log(ProductManager.getProducts());
 console.log(productManager1.getProductById(2));
 
