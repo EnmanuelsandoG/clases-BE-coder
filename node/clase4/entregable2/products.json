@@ -1,0 +1,11 @@
+[
+	{
+		"id": 0,
+		"title": "Baseball",
+		"description": "Little baseball used for the sport",
+		"price": 3000,
+		"thumbnail": "not found",
+		"code": 4567872,
+		"stock": 50
+	}
+]
