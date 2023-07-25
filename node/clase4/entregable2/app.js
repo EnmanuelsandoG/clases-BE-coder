@@ -35,30 +35,35 @@ const fs = require("fs");
 class ProductManager {
   constructor(path) {
     this.path = path ?? "./products.json";
+    this.id = 0;
     this.products = [];
   }
-
-  static id = 0;
 
   async checkProducts() {
     if (!fs.existsSync(this.path)) {
       await fs.promises.writeFile(this.path, JSON.stringify(this.products));
-    } //else {
-    //   const fileContent = await fs.promises.readFile(this.path, "utf-8");
-    //   this.products = JSON.parse(fileContent);
-    // }
+    } else {
+      const fileContent = await fs.promises.readFile(this.path, "utf-8");
+      this.products = JSON.parse(fileContent);
+      if (this.products.length > 0) {
+        this.id = this.products[this.products.length - 1].id + 1;
+      }
+    }
   }
 
   async getProducts() {
     await this.checkProducts();
-    return this.products;
+    const productsInfo = JSON.parse(
+      await fs.promises.readFile(this.path, "utf-8")
+    );
+    return productsInfo;
   }
 
   async addProduct({ title, description, price, thumbnail, code, stock }) {
     await this.checkProducts();
 
     const product = {
-      id: ProductManager.id++,
+      id: this.id++,
       title: title,
       description: description,
       price: price,
@@ -95,20 +100,147 @@ class ProductManager {
     return this.products;
   }
 
-  getProductById(productID) {
-    return this.products.find((product) => product.id == productID) ?? {};
+  async getProductById(productID) {
+    await this.checkProducts();
+    const productsInfo = JSON.parse(
+      await fs.promises.readFile(this.path, "utf-8")
+    );
+    const product = productsInfo.find((product) => product.id === productID);
+    return product ? product : {};
+  }
+
+  async updateProduct(productID, fieldUpdate) {
+    this.checkProducts();
+    const productsInfo = JSON.parse(
+      await fs.promises.readFile(this.path, "utf-8")
+    );
+    let fieldValue = productsInfo.find((product) => product.id === productID);
+    fieldValue.title = fieldUpdate.title ? fieldUpdate.title : fieldValue.title;
+    fieldValue.description = fieldUpdate.description
+      ? fieldUpdate.description
+      : fieldValue.description;
+    fieldValue.price = fieldUpdate.price ? fieldUpdate.price : fieldValue.price;
+    fieldValue.thumbnail = fieldUpdate.thumbnail
+      ? fieldUpdate.thumbnail
+      : fieldValue.thumbnail;
+    fieldValue.code = fieldUpdate.code ? fieldUpdate.code : fieldValue.code;
+    fieldValue.stock = fieldUpdate.stock ? fieldUpdate.stock : fieldValue.stock;
+    await fs.promises.writeFile(this.path, JSON.stringify(productsInfo));
+  }
+
+  async deleteProduct(productID) {
+    this.checkProducts();
+    let productsInfo = JSON.parse(
+      await fs.promises.readFile(this.path, "utf-8")
+    );
+    productsInfo = productsInfo.filter((product) => product.id !== productID);
+    // if (productsInfo) {
+    await fs.promises.writeFile(this.path, JSON.stringify(productsInfo));
+    // } else {
+    //   return;
+    // }
   }
 }
 
-const productManager1 = new ProductManager("./products.json");
+//Creacion de la instancia
+// const productManager1 = new ProductManager("./products.json");
 
-productManager1.addProduct({
-  title: "Baseball",
-  description: "Little baseball used for the sport",
-  price: 3000,
-  thumbnail: "not found",
-  code: 4567872,
-  stock: 50,
-});
+//Pruebo que funcione el metodo Add.Product
 
-productManager1.getProducts();
+// productManager1.addProduct({
+//   title: "baseball cap",
+//   description: "baseball cap used for the sport",
+//   price: 12000,
+//   thumbnail: "not found",
+//   code: 6754992,
+//   stock: 20,
+// });
+
+//Pruebo que funcione el metodo get products
+
+// productManager1.getProducts();
+
+//Pruebo que funcione el metodo getProductById
+
+// productManager1.getProductById(2);
+
+//pruebo que funcione el metodo Updateproduct
+
+// const productIDToUpdate = 0;
+// const fieldUpdate = {
+//   title: "Nuevo Update de producto",
+//   description: "una descripcion breve",
+//   price: 90000,
+//   code: 1234567,
+//   stock: 40,
+// };
+
+// productManager1
+//   .updateProduct(productIDToUpdate, fieldUpdate)
+//   .then(() => {
+//     console.log("Producto Actualizado Correctamente");
+//   })
+//   .catch((error) => {
+//     console.error("Error al actualizar el producto:", error.message);
+//   });
+
+//pruebo que funcione el metodo deleteProduct
+
+// productManager1
+//   .deleteProduct(1)
+//   .then(() => {
+//     console.log("Producto Eliminado Correctamente");
+//   })
+//   .catch((error) => {
+//     console.error("Error al eliminar el producto:", error.message);
+//   });
+
+//Nueva ejecucion en cadena de la instancia
+const prodMngr = new ProductManager("./products.json");
+
+//Products
+const productsExample = [
+  {
+    title: "Fender Stratocaster",
+    description: "Guitarra electrica marca Fender",
+    price: 800000,
+    thumbnail: "Whatever",
+    code: 3456789,
+    stock: 10,
+  },
+  {
+    title: "Gibson Les paul",
+    description: "Guitarra electrica marca gibson",
+    price: 1200000,
+    thumbnail: "Whatever",
+    code: 1234567,
+    stock: 5,
+  },
+  {
+    title: "Fender telecaster",
+    description: "Guitarra electrica marca Fender",
+    price: 780000,
+    thumbnail: "Whatever",
+    code: 7654321,
+    stock: 2,
+  },
+];
+
+//Ejecucion del codigo
+const app = async function () {
+  try {
+    // await prodMngr.addProduct(productsExample[1]);
+    // const prodsInfo = await prodMngr.getProducts();
+    // console.log(prodsInfo);
+    // const prodInfo = await prodMngr.getProductById(1);
+    // console.log(prodInfo);
+    // await prodMngr.updateProduct(3, { title: "Fender new Stratocaster" });
+    // await prodMngr.deleteProduct(2);
+
+    console.log("Ejecucion de APP satisfactoria!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+app();
