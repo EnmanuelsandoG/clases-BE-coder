@@ -1,0 +1,11 @@
+[
+	{
+		"id": 0,
+		"title": "Fender Stratocaster",
+		"description": "Guitarra electrica marca Fender",
+		"price": 800000,
+		"thumbnail": "Whatever",
+		"code": 3456789,
+		"stock": 10
+	}
+]
