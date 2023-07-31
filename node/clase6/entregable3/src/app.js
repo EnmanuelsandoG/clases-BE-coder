@@ -18,3 +18,51 @@ Sugerencias
 -Utiliza un archivo que ya tenga productos, pues el desafío sólo es para gets. 
 
 */
+
+//CommonJs
+// const express = require("express");
+// const ProductManager = require("ProductManager");
+
+//module
+import express from "express";
+import ProductManager from "./ProductManager.js";
+
+const app = express();
+const pm = new ProductManager("./products.json");
+
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/products", async (req, res) => {
+  try {
+    let limit = req.query.limit;
+    const products = await pm.getProducts();
+    if (!limit || limit > products.length) {
+      res.send(products);
+    } else {
+      const limitedProducts = products.slice(0, limit);
+      res.send(limitedProducts);
+    }
+  } catch (error) {
+    res.status(500).send("Internar server error");
+  }
+});
+
+//Modificar error de que no permite que ID sea 0. lo toma como falsy
+app.get("/products/:pid", async (req, res) => {
+  try {
+    let pid = parseInt(req.params.pid);
+    const productById = await pm.getProductById(pid);
+    if (productById.id || productById.id == 0) {
+      res.send(productById);
+    } else {
+      res.status(404).send("Product not found");
+    }
+  } catch (error) {
+    res.status(500).send("Internar server error");
+  }
+});
+
+const PORT = 8080;
+app.listen(PORT, () => {
+  console.log(`Servidor arriba en el puerto ${PORT}`);
+});

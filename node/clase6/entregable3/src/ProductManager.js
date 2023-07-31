@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 class ProductManager {
   constructor(path) {
@@ -234,7 +234,7 @@ const app = async function () {
     // await pm.addProduct(products[0]);
     // const prodsInfo = await pm.getProducts();
     // console.log(prodsInfo);
-    // const prodInfo = await pm.getProductById(1);
+    // const prodInfo = await pm.getProductById(4);
     // console.log(prodInfo);
     // await pm.updateProduct(3, { title: "Fender new Stratocaster" });
     // await pm.deleteProduct(0);
@@ -245,4 +245,7 @@ const app = async function () {
   }
 };
 
-app();
+// app();
+
+// module.exports = ProductManager;
+export default ProductManager;
