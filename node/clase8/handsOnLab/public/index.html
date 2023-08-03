@@ -23,11 +23,13 @@
         <h1>Pets</h1>
         <div class="box">
             <br><br>
-            <form action="http://localhost:8080/api/pets" method="post">
+            <form action="http://localhost:8080/api/pets" method="post" enctype="multipart/form-data">
                 <label>Name</label><br>
                 <input type="text" name="name" id="name" /><br>
                 <label>Species</label><br>
                 <input type="text" name="species" /><br>
+                <label>Thumbnail</label>
+                <input type="file" name="file" /><br>
                 <input type="submit" value="Enviar" />
             </form>
         </div>
