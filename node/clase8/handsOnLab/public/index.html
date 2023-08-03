@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+    <head>
+        <title>CoderHouse</title>
+        <script src="script.js"></script>
+        <style>
+            * {
+                background-color: black;
+                color: white;
+            }
+
+            body {
+                display: flex;
+            }
+
+            .box {
+                display: flex;
+                justify-content: center;
+                margin-top: 10%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Pets</h1>
+        <div class="box">
+            <br><br>
+            <form action="http://localhost:8080/api/pets" method="post">
+                <label>Name</label><br>
+                <input type="text" name="name" id="name" /><br>
+                <label>Species</label><br>
+                <input type="text" name="species" /><br>
+                <input type="submit" value="Enviar" />
+            </form>
+        </div>
+    </body>
+
+</html>
